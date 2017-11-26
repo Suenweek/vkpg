@@ -1,12 +1,12 @@
 from urllib.parse import urlparse
 from argparse import ArgumentParser
-from src.vkag import VkAlbumGetter
+from src.vkpg import VkPhotoGetter
 
 
 def main(args):
-    with VkAlbumGetter() as vkag:
-        vkag.login()
-        album = vkag.get_album(args.first_photo_url.geturl())
+    with VkPhotoGetter() as vkpg:
+        vkpg.login()
+        album = vkpg.get_album(args.first_photo_url.geturl())
         for photo in album.photos:
             print(photo.url)
 

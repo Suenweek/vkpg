@@ -13,16 +13,13 @@ VK_URL = "https://vk.com"
 FEW_SECONDS = 5
 
 
-class VkAlbumGetter(object):
+class VkPhotoGetter(object):
     """
     Allows to download photo albums from vk
     """
     def __init__(self):
         self.logger = logging.getLogger(__name__)
-        self.driver = webdriver.Firefox(
-            log_path=config.GECKODRIVER_LOG_PATH,
-            executable_path=config.GECKODRIVER_EXECUTABLE_PATH
-        )
+        self.driver = webdriver.Firefox(log_path=config.GECKODRIVER_LOG_PATH)
         self.wait = partial(WebDriverWait, self.driver)
 
     def __enter__(self):

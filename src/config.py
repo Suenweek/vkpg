@@ -8,7 +8,6 @@ LOG_DIR = "log"
 
 # WebDriver
 GECKODRIVER_LOG_PATH = os.path.join(LOG_DIR, "geckodriver.log")
-GECKODRIVER_EXECUTABLE_PATH = os.path.join(BIN_DIR, "geckodriver.exe")
 
 
 # VK user credentials
