@@ -2,14 +2,11 @@ import os
 
 
 # Common
-BIN_DIR = "bin"
+DEBUG = True
 LOG_DIR = "log"
+IMG_DIR = "img"
 
 
-# WebDriver
-GECKODRIVER_LOG_PATH = os.path.join(LOG_DIR, "geckodriver.log")
-
-
-# VK user credentials
+# Credentials
 VK_LOGIN = os.environ.get("VK_LOGIN")
 VK_PASS = os.environ.get("VK_PASS")
