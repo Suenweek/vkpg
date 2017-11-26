@@ -1,0 +1,5 @@
+FORM_LOGIN = "#index_login_form"
+INPUT_LOGIN = "#index_email"
+INPUT_PASS = "#index_pass"
+BTN_LOGIN = "#index_login_button"
+PROFILE_NAME = ".top_profile_name"
