@@ -1,5 +1,5 @@
 from pytest import raises
-from src import utils
+from app import utils
 
 
 class TestOffsetRange():

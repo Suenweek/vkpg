@@ -107,7 +107,3 @@ venv.bak/
 
 # PyCharm
 .idea
-
-# Custom dirs
-log/
-img/

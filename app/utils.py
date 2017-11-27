@@ -26,3 +26,12 @@ def offset_range(total, count_max):
         yield OffsetIteration(offset, count_cur)
         queue -= count_cur
         offset += count_cur
+
+
+def once():
+    def gen():
+        yield True
+        while True:
+            yield False
+    g = gen()
+    return lambda: next(g)
