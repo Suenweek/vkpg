@@ -66,7 +66,7 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/download")
 @login_required
+@app.route("/download", methods=["GET", "POST"])
 def download():
     return render_template("download.html")
