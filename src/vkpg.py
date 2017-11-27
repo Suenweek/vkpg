@@ -1,5 +1,5 @@
 import vk
-from .utils import offset
+from .utils import offset_range
 
 
 class VkPhotoGetter(object):

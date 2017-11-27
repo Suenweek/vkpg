@@ -1,0 +1,8 @@
+certifi==2017.11.5
+chardet==3.0.4
+idna==2.6
+py==1.5.2
+pytest==3.2.5
+requests==2.18.4
+urllib3==1.22
+vk==2.0.2

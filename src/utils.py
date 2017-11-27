@@ -1,8 +1,28 @@
-def offset(max_count, total):
-    while total:
-        if total < max_count:
-            cur_count = total
+from collections import namedtuple
+
+
+OffsetIteration = namedtuple("OffsetIteration", ["offset", "count"])
+
+
+# TODO: Add description
+def offset_range(total, count_max):
+    """
+    :param total:
+    :param count_max:
+    :return:
+    """
+    if total <= 0:
+        raise ValueError("total must be pos int")
+    if count_max <= 0:
+        raise ValueError("count_max must be pos int")
+
+    offset = 0
+    queue = total
+    while queue:
+        if queue < count_max:
+            count_cur = queue
         else:
-            cur_count = max_count
-        total -= cur_count
-        yield cur_count
+            count_cur = count_max
+        yield OffsetIteration(offset, count_cur)
+        queue -= count_cur
+        offset += count_cur
