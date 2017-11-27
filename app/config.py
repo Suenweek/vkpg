@@ -1,13 +1,20 @@
 import os
+import sys
 
 
-# Common
+# General
 APP_NAME = "VKPG"
-SECRET_KEY = os.environ.get("VKPG_SECRET_KEY")
-DEBUG = os.environ.get("VKPG_DEBUG")
+
+# Dirs
+BASEDIR = os.path.abspath(os.path.dirname(sys.argv[0]))
 LOG_DIR = "log"
 IMG_DIR = "img"
 
+# Secret key
+SECRET_KEY = os.environ.get("VKPG_SECRET_KEY")
+
+# Debug
+DEBUG = os.environ.get("VKPG_DEBUG")
 
 # VK
 VK_API_VERSION = "5.8"
