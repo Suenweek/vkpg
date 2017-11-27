@@ -2,6 +2,7 @@ import os
 
 
 # Common
+APP_NAME = "VKPG"
 SECRET_KEY = os.environ.get("VKPG_SECRET_KEY")
 DEBUG = os.environ.get("VKPG_DEBUG")
 LOG_DIR = "log"

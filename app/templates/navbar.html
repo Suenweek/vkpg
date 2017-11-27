@@ -16,33 +16,29 @@
           Index
         </a>
       </li>
-    </ul>
-    <ul class="nav navbar-nav navbar-right">
       {% if g.user.is_authenticated %}
-        <li>
-          <div class="dropdown">
-            <div class="btn dropdown-toggle" data-toggle="dropdown">
-              <img class="avatar img-circle" src="{{ g.user.avatar_url }}"
-                   width="32" height="32"/>
-              <span>{{ g.user.name }}</span>
-              <span class="caret"></span>
-            </div>
-            <ul class="dropdown-menu">
-              <li>
-                <a href="{{ url_for('logout') }}" name="logout">
-                  <span class="glyphicon glyphicon-log-out"></span>
-                  Logout
-                </a>
-              </li>
-            </ul>
-          </div>
-        </li>
-      {% else %}
-        {% if request.path == "/login" %}
+        {% if request.path == "/download" %}
           <li class="active">
         {% else %}
           <li>
         {% endif %}
+          <a href="{{ url_for('download') }}" name="index">
+            <span class="glyphicon glyphicon-download"></span>
+            Download
+          </a>
+        </li>
+      {% endif %}
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      {% if g.user.is_authenticated %}
+        <li>
+          <a href="{{ url_for('logout') }}" name="logout">
+            <span class="glyphicon glyphicon-log-out"></span>
+            Logout
+          </a>
+        </li>
+      {% else %}
+        <li>
           <a href="{{ url_for('login') }}" name="login">
             <span class="glyphicon glyphicon-log-in"></span>
             Login

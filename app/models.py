@@ -5,13 +5,11 @@ class VkUser(object):
     """
     Represents a user
     """
-    def __init__(self, id, access_token=None):
-        self.id = id
-        if access_token is not None:
-            self.access_token = access_token
+    def __init__(self, access_token):
+        self.access_token = access_token
 
     def __repr__(self):
-        return "<User(id='%s')>" % self.id
+        return "<VkUser()>"
 
     @property
     def is_authenticated(self):
@@ -26,7 +24,7 @@ class VkUser(object):
         return False
 
     def get_id(self):
-        return self.id
+        return self.access_token
 
     @property
     def access_token(self):

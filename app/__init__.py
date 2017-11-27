@@ -25,5 +25,7 @@ vk_oauth = oauth.remote_app(
 # LoginManager
 lm = LoginManager(app)
 lm.login_view = "login"
+lm.login_message_category = "warning"
+
 
 from . import routes

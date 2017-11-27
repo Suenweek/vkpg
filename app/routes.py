@@ -11,15 +11,8 @@ def before_request():
 
 
 @lm.user_loader
-def load_user(user_id):
-    return VkUser(id=user_id)
-
-
-@app.route("/")
-@app.route("/index")
-@login_required
-def index():
-    return render_template("index.html")
+def load_user(access_token):
+    return VkUser(access_token=access_token)
 
 
 @app.route("/login")
@@ -28,7 +21,7 @@ def login():
         return redirect(url_for("index"))
     else:
         next_url = request.args.get("next") or url_for("index")
-        return render_template("login.html", next=next_url)
+        return redirect(url_for("login_oauth_vk", next=next_url))
 
 
 @app.route("/logout")
@@ -60,8 +53,20 @@ def callback_oauth_vk():
         flash("You denied the request to sign in", category="warning")
         return redirect(next_url)
 
-    user = VkUser(id=response["user_id"], access_token=response["access_token"])
+    user = VkUser(access_token=response["access_token"])
     login_user(user)
 
     flash("Successfully logged in", category="success")
     return redirect(next_url)
+
+
+@app.route("/")
+@app.route("/index")
+def index():
+    return render_template("index.html")
+
+
+@app.route("/download")
+@login_required
+def download():
+    return render_template("download.html")
