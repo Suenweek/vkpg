@@ -1,4 +1,4 @@
-from flask import g, redirect, url_for, request, render_template, flash, send_file
+from flask import g, redirect, url_for, request, render_template, flash
 from flask_login import login_user, logout_user, current_user, login_required
 from flask_oauthlib.client import OAuthException
 from . import app, vk_oauth, lm

@@ -1,9 +1,9 @@
 import os
 from multiprocessing import Pool, Process
-import webbrowser
 from functools import partial
-import vk
+import webbrowser
 import requests
+import vk
 from .utils import offset_range
 from .config import VK_API_VERSION, ALBUMS_DIR
 

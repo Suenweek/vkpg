@@ -2,8 +2,12 @@ from argparse import ArgumentParser
 from app import app
 
 
+HOST = "127.0.0.1"
+PORT = 5000
+
+
 def main(args):
-    app.run("127.0.0.1", 5000)
+    app.run(HOST, PORT)
 
 
 if __name__ == "__main__":
