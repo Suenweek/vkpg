@@ -11,24 +11,8 @@ def before_request():
 
 
 @lm.user_loader
-def load_user(access_token):
-    return VkUser(access_token=access_token)
-
-
-@app.route("/login")
-def login():
-    if current_user.is_authenticated:
-        return redirect(url_for("index"))
-    else:
-        next_url = request.args.get("next") or url_for("index")
-        return redirect(url_for("login_oauth_vk", next=next_url))
-
-
-@app.route("/logout")
-def logout():
-    logout_user()
-    flash("Logged out", category="info")
-    return redirect(url_for("index"))
+def load_user(user_id):
+    return VkUser.get(user_id)
 
 
 @app.route("/login/oauth/vk")
@@ -53,20 +37,29 @@ def callback_oauth_vk():
         flash("You denied the request to sign in", category="warning")
         return redirect(next_url)
 
-    user = VkUser(access_token=response["access_token"])
-    login_user(user)
+    user = VkUser.create(
+        user_id=response["user_id"],
+        access_token=response["access_token"]
+    )
 
-    flash("Successfully logged in", category="success")
-    return redirect(next_url)
+    if user is not None:
+        login_user(user)
+        flash("Successfully logged in", category="success")
+        return redirect(next_url)
+    else:
+        flash("Was not able log you in, try again later", category="danger")
+        return redirect(next_url)
+
+
+@login_required
+@app.route("/logout")
+def logout():
+    logout_user()
+    flash("Logged out", category="info")
+    return redirect(url_for("index"))
 
 
 @app.route("/")
 @app.route("/index")
 def index():
     return render_template("index.html")
-
-
-@login_required
-@app.route("/download", methods=["GET", "POST"])
-def download():
-    return render_template("download.html")

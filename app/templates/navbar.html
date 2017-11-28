@@ -6,31 +6,13 @@
       </a>
     </div>
     <ul class="nav navbar-nav">
-      {% if request.path == "/" or request.path == "/index" %}
-        <li class="active">
-      {% else %}
-        <li>
-      {% endif %}
-        <a href="{{ url_for('index') }}" name="index">
-          <span class="glyphicon glyphicon-home"></span>
-          Index
-        </a>
-      </li>
-      {% if g.user.is_authenticated %}
-        {% if request.path == "/download" %}
-          <li class="active">
-        {% else %}
-          <li>
-        {% endif %}
-          <a href="{{ url_for('download') }}" name="index">
-            <span class="glyphicon glyphicon-download"></span>
-            Download
-          </a>
-        </li>
-      {% endif %}
+      <!-- Empty for now -->
     </ul>
     <ul class="nav navbar-nav navbar-right">
       {% if g.user.is_authenticated %}
+        <li>
+          <img class="img-circle" src="{{ g.user.avatar_url }}"/>
+        </li>
         <li>
           <a href="{{ url_for('logout') }}" name="logout">
             <span class="glyphicon glyphicon-log-out"></span>
@@ -39,7 +21,7 @@
         </li>
       {% else %}
         <li>
-          <a href="{{ url_for('login') }}" name="login">
+          <a href="{{ url_for('login_oauth_vk') }}" name="login">
             <span class="glyphicon glyphicon-log-in"></span>
             Login
           </a>

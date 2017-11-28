@@ -21,3 +21,7 @@ VK_API_VERSION = "5.8"
 VK_CONSUMER_KEY = os.environ.get("VKPG_VK_CONSUMER_KEY", "")
 VK_CONSUMER_SECRET = os.environ.get("VKPG_VK_CONSUMER_SECRET", "")
 VK_PERMISSIONS = ""
+
+# Defaults
+VK_USER_DEFAULT_NAME = "Unknown"
+VK_USER_DEFAULT_AVATAR_URL = "/static/img/anon_50x50.png"

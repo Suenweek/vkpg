@@ -1,12 +1,16 @@
 {% extends "base.html" %}
 
+{% block styles %}
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+
 {% block content %}
   <div class="container">
     <div class="jumbotron">
       <h1>Welcome to VKPG!</h1>
-      <p>VKPG is an app that downloads photos from VK</p>
+      <p>VKPG is an app that downloads photo albums from VK.</p>
     </div>
-    {% if not g.user.is_authenticated %}
-    {% endif %}
+    <div class="row">
+    </div>
   </div>
 {% endblock %}
