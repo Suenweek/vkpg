@@ -3,11 +3,17 @@ from urllib.parse import urlparse
 
 
 class VkAlbumUrl(object):
-
+    """
+    Represents vk url for a photo album
+    """
     def __init__(self, url):
         self.regex = re.compile(r"/album(\d+)_(\d+)")
         self.owner_id, self.album_id = self.parse(url)
 
     def parse(self, url):
         path = urlparse(url).path
-        return self.regex.search(path)
+        search = self.regex.search(path)
+        if search is not None:
+            return search.groups()
+        else:
+            raise ValueError("Invalid album url")

@@ -1,8 +1,10 @@
-from flask import g, redirect, url_for, request, render_template, flash
+from flask import g, redirect, url_for, request, render_template, flash, send_file
 from flask_login import login_user, logout_user, current_user, login_required
 from flask_oauthlib.client import OAuthException
 from . import app, vk_oauth, lm
+from .forms import DownloadForm
 from .models import VkUser
+from .vkpg import VkPhotoGetter
 
 
 @app.before_request
@@ -59,7 +61,16 @@ def logout():
     return redirect(url_for("index"))
 
 
-@app.route("/")
-@app.route("/index")
+@app.route("/", methods=["GET", "POST"])
 def index():
-    return render_template("index.html")
+    form = DownloadForm()
+    if form.validate_on_submit():
+        access_token = current_user.access_token if current_user.is_authenticated else ""
+        vkpg = VkPhotoGetter(access_token=access_token)
+        try:
+            album = vkpg.get_album(url=form.album_url.parsed)
+            return send_file(album.path, as_attachment=True)
+        except Exception as e:
+            app.logger.exception(e)
+            flash(str(e), category="danger")
+    return render_template("index.html", form=form)
