@@ -68,8 +68,7 @@ def index():
         access_token = current_user.access_token if current_user.is_authenticated else ""
         vkpg = VkPhotoGetter(access_token=access_token)
         try:
-            album = vkpg.get_album(url=form.album_url.parsed)
-            return send_file(album, as_attachment=True)
+            vkpg.get_album(url=form.album_url.parsed)
         except Exception as e:
             app.logger.exception(e)
             flash(str(e), category="danger")

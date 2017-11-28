@@ -1,9 +1,11 @@
 import os
-from multiprocessing import Pool
+from multiprocessing import Pool, Process
+import webbrowser
+from functools import partial
 import vk
 import requests
 from .utils import offset_range
-from .config import VK_API_VERSION, ALBUMS_DIR, BASEDIR
+from .config import VK_API_VERSION, ALBUMS_DIR
 
 
 MAX_PHOTOS_PER_REQUEST = 1000
@@ -19,16 +21,27 @@ class VkPhotoGetter(object):
         self.api = vk.API(session=self.session)
 
     def get_album(self, url):
+        # Count photos
         photos_total_count = self.count_album_photos(url)
         if not photos_total_count:
             raise ValueError("No album found or album is empty")
+
+        # Setup album path
+        album_path = os.path.join(ALBUMS_DIR, self.get_album_name(url))
+        if not os.path.exists(album_path):
+            os.mkdir(album_path)
+
+        # Get photos generator
         photos = self.get_album_photos(url, photos_total_count)
-        pool = Pool(NUM_PROCS)
-        pool.map(save_photo, photos)
-        pool.close()
-        pool.join()
-        # TODO: Gzip album
-        return os.path.join(BASEDIR, "app", "static", "img", "anon_50x50.png")
+
+        # Download photos using multiprocessing
+        Process(
+            target=save_all_photos,
+            args=(photos, album_path)
+        ).start()
+
+        # Open result in explorer/nautilus/whatever
+        webbrowser.open("file://%s" % album_path)
 
     def count_album_photos(self, url):
         return self.api.photos.get(
@@ -37,6 +50,10 @@ class VkPhotoGetter(object):
             count=0,
             v=VK_API_VERSION
         ).get("count")
+
+    def get_album_name(self, url):
+        # TODO: Get actual name
+        return "name"
 
     def get_album_photos(self, url, photos_total_count):
         for offset, count in offset_range(photos_total_count, count_max=MAX_PHOTOS_PER_REQUEST):
@@ -51,11 +68,20 @@ class VkPhotoGetter(object):
                 yield self.find_largest_photo(item)
 
     def find_largest_photo(self, photo):
-        max_key = max([key for key in photo.keys() if key.startswith("photo")],
+        max_key = max([key for key in photo.keys()
+                       if key.startswith("photo_")],
                       key=lambda size: int(size.split("_")[-1]))
         return photo[max_key]
 
 
-def save_photo(url, path=ALBUMS_DIR):
-    with open(os.path.join(path, "%s.jpg") % hash(url), "wb") as f:
+def save_photo(url, album_path):
+    filename = os.path.join(album_path, "%s.jpg" % hash(url))
+    with open(filename, "wb") as f:
         f.write(requests.get(url).content)
+
+
+def save_all_photos(photos, album_path):
+    pool = Pool(NUM_PROCS)
+    pool.map(partial(save_photo, album_path=album_path), photos)
+    pool.close()
+    pool.join()
