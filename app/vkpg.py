@@ -1,5 +1,5 @@
 import os
-from multiprocessing import Pool, Process
+from multiprocessing.pool import ThreadPool
 from functools import partial
 import webbrowser
 import requests
@@ -9,7 +9,7 @@ from .config import VK_API_VERSION, ALBUMS_DIR
 
 
 MAX_PHOTOS_PER_REQUEST = 1000
-NUM_PROCS = 32
+NUM_WORKERS = 16
 
 
 class VkPhotoGetter(object):
@@ -34,11 +34,8 @@ class VkPhotoGetter(object):
         # Get photos generator
         photos = self.get_album_photos(url, photos_total_count)
 
-        # Download photos using multiprocessing
-        Process(
-            target=save_all_photos,
-            args=(photos, album_path)
-        ).start()
+        # Download and save photos using multiple threads
+        self._save_all_photos(photos, album_path)
 
         # Open result in explorer/nautilus/whatever
         webbrowser.open("file://%s" % album_path)
@@ -65,23 +62,21 @@ class VkPhotoGetter(object):
                 v=VK_API_VERSION
             )
             for item in bunch["items"]:
-                yield self.find_largest_photo(item)
+                yield self._find_largest_photo(item)
 
-    def find_largest_photo(self, photo):
+    def _find_largest_photo(self, photo):
         max_key = max([key for key in photo.keys()
                        if key.startswith("photo_")],
                       key=lambda size: int(size.split("_")[-1]))
         return photo[max_key]
 
+    def _save_all_photos(self, photos, album_path):
+        pool = ThreadPool(NUM_WORKERS)
+        pool.map(partial(self._save_photo, album_path=album_path), photos)
+        pool.close()
+        pool.join()
 
-def save_photo(url, album_path):
-    filename = os.path.join(album_path, "%s.jpg" % hash(url))
-    with open(filename, "wb") as f:
-        f.write(requests.get(url).content)
-
-
-def save_all_photos(photos, album_path):
-    pool = Pool(NUM_PROCS)
-    pool.map(partial(save_photo, album_path=album_path), photos)
-    pool.close()
-    pool.join()
+    def _save_photo(self, url, album_path):
+        filename = os.path.join(album_path, "%s.jpg" % hash(url))
+        with open(filename, "wb") as f:
+            f.write(requests.get(url).content)
