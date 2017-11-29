@@ -50,7 +50,7 @@ class VkPhotoGetter(object):
         ).get("count")
 
     def _get_album_path(self, url):
-        dir_name = "%s_album_%s_%s"  % (APP_NAME, url.owner_id, url.album_id)
+        dir_name = "%s_album_%s_%s" % (APP_NAME, url.owner_id, url.album_id)
         return os.path.join(gettempdir(), dir_name)
 
     def get_album_photos(self, url, photos_total_count):

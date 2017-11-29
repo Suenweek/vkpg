@@ -6,7 +6,7 @@
   <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
 
   <!-- Title -->
-  <title>{{ config.APP_NAME }}</title>
+  <title>{{ config.APP_NAME.capitalize() }}</title>
 
   <!-- Styles -->
   {% block styles %}

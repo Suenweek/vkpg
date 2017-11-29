@@ -3,7 +3,7 @@ import sys
 
 
 # General
-APP_NAME = "VKPG"
+APP_NAME = "vkpg"
 BASEDIR = os.path.abspath(os.path.dirname(sys.argv[0]))
 
 # Secret key
