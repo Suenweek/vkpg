@@ -53,8 +53,8 @@ def callback_oauth_vk():
         return redirect(next_url)
 
 
-@login_required
 @app.route("/logout")
+@login_required
 def logout():
     logout_user()
     flash("Logged out", category="info")
