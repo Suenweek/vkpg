@@ -20,12 +20,7 @@ def load_user(user_id):
 
 @app.route("/login/oauth/vk")
 def login_oauth_vk():
-    vk_app_params_are_set = not (
-        app.config["VK_CONSUMER_KEY"] is None
-        and
-        app.config["VK_CONSUMER_SECRET"] is None
-    )
-    if vk_app_params_are_set:
+    if app.config["VK_APP_PARAMS_SET"]:
         next_url = request.args.get("next") or request.referrer or None
         callback_url = url_for("callback_oauth_vk", next=next_url, _external=True)
         return vk_oauth.authorize(callback=callback_url)
