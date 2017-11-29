@@ -1,3 +1,5 @@
+import logging
+from logging.handlers import RotatingFileHandler
 from flask import Flask
 from flask_oauthlib.client import OAuth
 from flask_login import LoginManager
@@ -9,6 +11,19 @@ app = Flask(__name__)
 
 # Config
 app.config.from_object(config)
+
+# Logging
+if app.debug:
+    app.logger.setLevel(logging.DEBUG if app.debug else logging.INFO)
+handler = RotatingFileHandler(
+    filename=config.LOG_PATH,
+    mode="a",
+    maxBytes=config.LOG_MAX_BYTES,
+    backupCount=config.LOG_BAK_COUNT
+)
+handler.setLevel(logging.DEBUG if app.debug else logging.INFO)
+handler.setFormatter(logging.Formatter(config.LOG_FMT))
+app.logger.addHandler(handler)
 
 # OAuth
 oauth = OAuth(app)
