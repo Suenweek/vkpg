@@ -82,6 +82,7 @@ def index():
         try:
             app.logger.info("Downloading %s", form.album_url.parsed)
             vkpg.get_album(url=form.album_url.parsed)
+            flash("Album downloaded", category="success")
         except Exception as e:
             app.logger.exception(e)
             flash(str(e), category="danger")
