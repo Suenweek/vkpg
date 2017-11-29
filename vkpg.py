@@ -8,7 +8,7 @@ LOCALHOST = "127.0.0.1"
 
 def main(args):
     if args.browser_needed:
-        webbrowser.open("%s:%d" % (LOCALHOST, args.port))
+        webbrowser.open("http://%s:%d" % (LOCALHOST, args.port))
     app.run(LOCALHOST, args.port, debug=args.debug)
 
 
