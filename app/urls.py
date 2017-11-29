@@ -10,6 +10,9 @@ class VkAlbumUrl(object):
         self.regex = re.compile(r"/album(\-{0,1}\d+)_(\d+)")
         self.owner_id, self.album_id = self.parse(url)
 
+    def __str__(self):
+        return "<VkAlbumUrl(owner_id='%s', album_id='%s')>" % (self.owner_id, self.album_id)
+
     def parse(self, url):
         path = urlparse(url).path
         search = self.regex.search(path)

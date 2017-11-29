@@ -1,3 +1,4 @@
+import sys
 from flask import g, redirect, url_for, request, render_template, flash
 from flask_login import login_user, logout_user, current_user, login_required
 from flask_oauthlib.client import OAuthException
@@ -36,6 +37,7 @@ def callback_oauth_vk():
         return redirect(next_url)
 
     if response is None:
+        app.logger.info("%s denied request to sign in", user)
         flash("You denied the request to sign in", category="warning")
         return redirect(next_url)
 
@@ -43,22 +45,32 @@ def callback_oauth_vk():
         user_id=response["user_id"],
         access_token=response["access_token"]
     )
-
     if user is not None:
+        app.logger.info("Logging in %s", user)
         login_user(user)
         flash("Successfully logged in", category="success")
-        return redirect(next_url)
     else:
+        app.logger.error("Was not able to login %s", user)
         flash("Was not able log you in, try again later", category="danger")
-        return redirect(next_url)
+    return redirect(next_url)
 
 
 @app.route("/logout")
 @login_required
 def logout():
+    next_url = request.args.get("next") or url_for("index")
+    app.logger.info("Logging out %s", current_user)
     logout_user()
     flash("Logged out", category="info")
-    return redirect(url_for("index"))
+    return redirect(next_url)
+
+
+@app.route("/shutdown")
+def shutdown():
+    if current_user.is_authenticated:
+        return redirect(url_for("logout", next=url_for("shutdown")))
+    app.logger.info("<== Shutting down... ==>")
+    sys.exit(0)
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -68,6 +80,7 @@ def index():
         access_token = current_user.access_token if current_user.is_authenticated else ""
         vkpg = VkPhotoGetter(access_token=access_token)
         try:
+            app.logger.info("Downloading %s", form.album_url.parsed)
             vkpg.get_album(url=form.album_url.parsed)
         except Exception as e:
             app.logger.exception(e)

@@ -1,3 +1,6 @@
+import os
+import logging
+from logging.handlers import RotatingFileHandler
 from collections import namedtuple
 
 
@@ -18,3 +21,23 @@ def offset_range(total, count_max, offset=0):
         yield OffsetIteration(offset, count_cur)
         total -= count_cur
         offset += count_cur
+
+
+def configure_logging(app):
+    # Log path
+    if not os.path.exists(app.config["LOG_DIR"]):
+        os.mkdir(app.config["LOG_DIR"])
+
+    # Logger log level
+    app.logger.setLevel(logging.DEBUG if app.debug else logging.INFO)
+
+    # Handler
+    handler = RotatingFileHandler(
+        filename=app.config["LOG_PATH"],
+        mode="a",
+        maxBytes=app.config["LOG_MAX_BYTES"],
+        backupCount=app.config["LOG_BAK_COUNT"]
+    )
+    handler.setFormatter(logging.Formatter(app.config["LOG_FMT"]))
+    handler.setLevel(logging.DEBUG if app.debug else logging.INFO)
+    app.logger.addHandler(handler)
