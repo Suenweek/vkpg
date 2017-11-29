@@ -1,10 +1,10 @@
 import os
-from tempfile import gettempdir
-from multiprocessing.pool import ThreadPool
-from functools import partial
 import webbrowser
 import requests
 import vk
+from functools import partial
+from tempfile import gettempdir
+from multiprocessing.pool import ThreadPool
 from .utils import offset_range
 from .config import VK_API_VERSION, APP_NAME
 
@@ -24,8 +24,8 @@ class VkPhotoGetter(object):
     def get_album(self, url):
         # Count photos
         photos_total_count = self.count_album_photos(url)
-        if not photos_total_count:
-            raise ValueError("No album found or album is empty")
+        if photos_total_count == 0:
+            raise ValueError("Album is empty")
 
         # Setup album path
         album_path = self._get_album_path(url)
@@ -47,7 +47,7 @@ class VkPhotoGetter(object):
             album_id=url.album_id,
             count=0,
             v=VK_API_VERSION
-        ).get("count")
+        ).get("count", 0)
 
     def _get_album_path(self, url):
         dir_name = "%s_album_%s_%s" % (APP_NAME, url.owner_id, url.album_id)
