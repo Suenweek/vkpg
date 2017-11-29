@@ -4,10 +4,11 @@ import sys
 
 # General
 APP_NAME = "vkpg"
+REPO_URL = "https://github.com/Suenweek/vkpg"
 BASEDIR = os.path.abspath(os.path.dirname(sys.argv[0]))
 
 # Secret key
-SECRET_KEY = os.environ["VKPG_SECRET_KEY"]
+SECRET_KEY = os.environ.get("VKPG_SECRET_KEY", "You'd better set it yourself")
 
 # Debug
 DEBUG = os.environ.get("VKPG_DEBUG")
@@ -21,6 +22,6 @@ LOG_BAK_COUNT = 3
 
 # VK
 VK_API_VERSION = "5.69"
-VK_CONSUMER_KEY = os.environ["VKPG_VK_CONSUMER_KEY"]
-VK_CONSUMER_SECRET = os.environ["VKPG_VK_CONSUMER_SECRET"]
+VK_CONSUMER_KEY = os.environ.get("VKPG_VK_CONSUMER_KEY")
+VK_CONSUMER_SECRET = os.environ.get("VKPG_VK_CONSUMER_SECRET")
 VK_PERMISSIONS = "photos"

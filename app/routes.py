@@ -20,9 +20,20 @@ def load_user(user_id):
 
 @app.route("/login/oauth/vk")
 def login_oauth_vk():
-    next_url = request.args.get("next") or request.referrer or None
-    callback_url = url_for("callback_oauth_vk", next=next_url, _external=True)
-    return vk_oauth.authorize(callback=callback_url)
+    vk_app_params_are_set = not (
+        app.config["VK_CONSUMER_KEY"] is None
+        and
+        app.config["VK_CONSUMER_SECRET"] is None
+    )
+    if vk_app_params_are_set:
+        next_url = request.args.get("next") or request.referrer or None
+        callback_url = url_for("callback_oauth_vk", next=next_url, _external=True)
+        return vk_oauth.authorize(callback=callback_url)
+
+    flash("Login feature is not available as no VK app parameters set. "
+          "Consult %s for solution." % app.config["REPO_URL"],
+          category="warning")
+    return redirect(url_for("index"))
 
 
 @app.route("/callback/oauth/vk")
@@ -37,7 +48,7 @@ def callback_oauth_vk():
         return redirect(next_url)
 
     if response is None:
-        app.logger.info("%s denied request to sign in", user)
+        app.logger.info("%s denied request to sign in", current_user)
         flash("You denied the request to sign in", category="warning")
         return redirect(next_url)
 
