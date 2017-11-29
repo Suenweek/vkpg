@@ -13,16 +13,13 @@
   {% endblock %}
 
   <!-- JQuery -->
-  <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.11.1.min.js') }}"></script>
 
   <!-- Bootstrap with theme -->
-  <link rel="stylesheet" href="https://bootswatch.com/3/cerulean/bootstrap.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
 
   <!-- Latest compiled and minified JavaScript -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
-  <!-- SocketIO -->
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.5/socket.io.min.js"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
 
   <!-- Scripts -->
   {% block scripts %}
@@ -31,6 +28,7 @@
 
 <body>
   <div class="container-fluid fill">
+    <!-- Navbar -->
     {% include "navbar.html" %}
 
     <!-- Flashed messages -->
