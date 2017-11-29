@@ -57,8 +57,7 @@ class VkUser(object):
 
         # Parsing response
         if len(response) != 1:
-            app.logger.error("Unexpected vk response while updating "
-                             "vk user info: %s" % response)
+            app.logger.error("Unexpected vk response while updating vk user info: %s", response)
             return None
         vk_user_info = response[0]
 
@@ -66,13 +65,15 @@ class VkUser(object):
         first_name = vk_user_info.get("first_name")
         last_name = vk_user_info.get("last_name")
         # If both names are not None
-        if not (first_name is None or last_name is None):
-            name = "%s %s" % (first_name, last_name)
-        else:
-            name = app.config["VK_USER_DEFAULT_NAME"]
+        if first_name is None or last_name is None:
+            app.logger.error("Unexpected user name in vk_user_info: %s", vk_user_info)
+            return None
+        name = "%s %s" % (first_name, last_name)
 
         # Avatar
-        avatar_url = vk_user_info.get("photo_50", app.config["VK_USER_DEFAULT_AVATAR_URL"])
+        avatar_url = vk_user_info.get("photo_50")
+        if avatar_url is None:
+            app.logger.error("Unexpected avatar_url in vk_user_info: %s", vk_user_info)
 
         return cls(
             user_id=user_id,
