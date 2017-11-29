@@ -1,12 +1,5 @@
 # Vkpg
-Vkpg is a desktop app for downloading photo albums from VK.
-
-
-## Requirements
-In order to run __Vkpg__ you will need to create VK standalone app
-to get keys for OAuth. See
-[VK API docs](https://vk.com/dev/manuals)
-for details.
+![screenshot](app/static/img/screenshot.png)
 
 
 ## Installation
@@ -38,3 +31,10 @@ export VKPG_VK_CONSUMER_SECRET="Your VK app *Secure key*"
 ```bash
 python vkpg.py [-h/--help] [-d/--debug] [-nb/--no-browser] [port]
 ```
+
+## Restricted photo albums
+In order to access restricted photo albums you will need to
+create VK standalone app to get keys for OAuth to allow login.
+See
+[VK API docs](https://vk.com/dev/manuals)
+for details.
