@@ -7,9 +7,7 @@ APP_NAME = "VKPG"
 
 # Dirs
 BASEDIR = os.path.abspath(os.path.dirname(sys.argv[0]))
-TMP_DIR = os.path.join(BASEDIR, "tmp")
-LOG_DIR = os.path.join(TMP_DIR, "log")
-ALBUMS_DIR = os.path.join(TMP_DIR, "albums")
+LOG_PATH = os.path.join(BASEDIR, "log")
 
 # Secret key
 SECRET_KEY = os.environ.get("VKPG_SECRET_KEY")
