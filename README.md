@@ -1,6 +1,5 @@
 # Vkpg
-Vkpg is a desktop app for downloading photo albums from VK.
-
+![screenshot](app/static/img/screenshot.png)
 
 ## Requirements
 In order to run __Vkpg__ you will need to create VK standalone app
