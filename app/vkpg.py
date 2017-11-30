@@ -32,10 +32,10 @@ class VkPhotoGetter(object):
         if not os.path.exists(album_path):
             os.mkdir(album_path)
 
-        # Get photos generator
+        # Get photos urls
         photos = self.get_album_photos(url, photos_total_count)
 
-        # Download and save photos using multiple threads
+        # Download and save
         self._save_all_photos(photos, album_path)
 
         # Open result in explorer/nautilus/whatever
