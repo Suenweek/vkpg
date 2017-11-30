@@ -2,6 +2,7 @@ import sys
 from flask import g, redirect, url_for, request, render_template, flash
 from flask_login import login_user, logout_user, current_user, login_required
 from flask_oauthlib.client import OAuthException
+from vk.exceptions import VkException
 from . import app, vk_oauth, lm
 from .forms import DownloadForm
 from .models import VkUser
@@ -75,7 +76,7 @@ def logout():
 def shutdown():
     if current_user.is_authenticated:
         return redirect(url_for("logout", next=url_for("shutdown")))
-    app.logger.info("<== Shutting down... ==>")
+    app.logger.info("<== Shutting down ==>")
     sys.exit(0)
 
 
@@ -88,7 +89,11 @@ def index():
         try:
             app.logger.info("Downloading %s", form.album_url.parsed)
             vkpg.get_album(url=form.album_url.parsed)
+            app.logger.info("Done")
             flash("Album downloaded", category="success")
+        except VkException as e:
+            app.logger.warning(e)
+            flash(str(e), category="danger")
         except Exception as e:
             app.logger.exception(e)
             flash(str(e), category="danger")

@@ -11,7 +11,7 @@ app = Flask(__name__)
 # Config
 app.config.from_object(config)
 configure_logging(app)
-app.logger.info("<== Starting up... ==>")
+app.logger.info("<== Starting up ==>")
 
 # OAuth
 oauth = OAuth(app)
