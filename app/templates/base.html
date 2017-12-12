@@ -8,10 +8,6 @@
   <!-- Title -->
   <title>{{ config.APP_NAME.capitalize() }}</title>
 
-  <!-- Styles -->
-  {% block styles %}
-  {% endblock %}
-
   <!-- JQuery -->
   <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.11.1.min.js') }}"></script>
 
@@ -20,6 +16,11 @@
 
   <!-- Latest compiled and minified JavaScript -->
   <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+  {% block styles %}
+  {% endblock %}
 
   <!-- Scripts -->
   {% block scripts %}

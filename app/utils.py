@@ -1,5 +1,6 @@
 import os
 import logging
+from time import sleep
 from logging.handlers import RotatingFileHandler
 from collections import namedtuple
 
@@ -21,6 +22,12 @@ def offset_range(total, count_max, offset=0):
         yield OffsetIteration(offset, count_cur)
         total -= count_cur
         offset += count_cur
+
+
+def rate_limit_sleep_hook(seconds):
+    def hook(response, **kwargs):
+        sleep(seconds)
+    return hook
 
 
 def configure_logging(app):

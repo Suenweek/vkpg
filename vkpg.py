@@ -3,13 +3,10 @@ from app import app
 import webbrowser
 
 
-LOCALHOST = "127.0.0.1"
-
-
 def main(args):
     if args.browser_needed:
-        webbrowser.open("http://%s:%d" % (LOCALHOST, args.port))
-    app.run(LOCALHOST, args.port, debug=args.debug)
+        webbrowser.open("http://127.0.0.1:%d" % args.port)
+    app.run(port=args.port, debug=args.debug)
 
 
 if __name__ == "__main__":

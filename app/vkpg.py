@@ -5,12 +5,13 @@ import vk
 from functools import partial
 from tempfile import gettempdir
 from multiprocessing.pool import ThreadPool
-from .utils import offset_range
+from .utils import offset_range, rate_limit_sleep_hook
 from .config import VK_API_VERSION, APP_NAME
 
 
 MAX_PHOTOS_PER_REQUEST = 1000
-NUM_WORKERS = 16
+NUM_WORKERS = 8
+RATE_LIMIT_SLEEP_TIME = 0.3
 
 
 class VkPhotoGetter(object):
@@ -19,6 +20,9 @@ class VkPhotoGetter(object):
     """
     def __init__(self, access_token):
         self.session = vk.Session(access_token=access_token)
+        self.session.requests_session.hooks["response"].append(
+            rate_limit_sleep_hook(seconds=RATE_LIMIT_SLEEP_TIME)
+        )
         self.api = vk.API(session=self.session)
 
     def get_album(self, url):
