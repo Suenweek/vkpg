@@ -24,10 +24,10 @@ def offset_range(total, count_max, offset=0):
         offset += count_cur
 
 
-def rate_limit_sleep_hook(seconds):
-    def hook(response, **kwargs):
+def create_sleep_hook(seconds):
+    def sleep_hook(response, **kwargs):
         sleep(seconds)
-    return hook
+    return sleep_hook
 
 
 def configure_logging(app):

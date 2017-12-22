@@ -5,7 +5,7 @@ import vk
 from functools import partial
 from tempfile import gettempdir
 from multiprocessing.pool import ThreadPool
-from .utils import offset_range, rate_limit_sleep_hook
+from .utils import offset_range, create_sleep_hook
 from .config import VK_API_VERSION, APP_NAME
 
 
@@ -21,7 +21,7 @@ class VkPhotoGetter(object):
     def __init__(self, access_token):
         self.session = vk.Session(access_token=access_token)
         self.session.requests_session.hooks["response"].append(
-            rate_limit_sleep_hook(seconds=RATE_LIMIT_SLEEP_TIME)
+            create_sleep_hook(seconds=RATE_LIMIT_SLEEP_TIME)
         )
         self.api = vk.API(session=self.session)
 
@@ -76,8 +76,9 @@ class VkPhotoGetter(object):
         return photo[max_key]
 
     def _save_all_photos(self, photos, album_path):
+        save_photo = partial(self._save_photo, album_path=album_path)
         pool = ThreadPool(NUM_WORKERS)
-        pool.map(partial(self._save_photo, album_path=album_path), photos)
+        pool.map(save_photo, photos)
         pool.close()
         pool.join()
 
