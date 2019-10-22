@@ -12,7 +12,7 @@ MarkupSafe==1.0
 oauthlib==2.0.6
 py==1.5.2
 pytest==3.2.5
-requests==2.18.4
+requests==2.20.0
 requests-oauthlib==0.8.0
 urllib3==1.24.2
 vk==2.0.2
